@@ -41,7 +41,20 @@ app.get('/api/enemies/:enemyId', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch enemy' });
   }
 });
-
+app.get('/api/cards/:cardId', async (req, res) => {
+  const { cardId } = req.params;
+  try {
+    const [rows] = await pool.execute('SELECT * FROM cards WHERE id = ?', [cardId]);
+    if (rows.length > 0) {
+      res.json(rows[0]);
+    } else {
+      res.status(404).json({ error: 'Card not found' });
+    }
+  } catch (error) {
+    console.error('Error fetching card:', error);
+    res.status(500).json({ error: 'Failed to fetch card' });
+  }
+});
 app.get('/api/levels/:levelId', async (req, res) => {
   const { levelId } = req.params;
   try {

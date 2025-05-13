@@ -2,28 +2,18 @@ import BackendService from '../src/BackendService';
 class GameManager {
     private backendService: BackendService;
     private gameState: any;
-
+    private deck:Array<number>;
     constructor() {
         this.backendService = new BackendService();
-        this.gameState = {};
+        this.gameState = {"level":1,'playerMaxHp':100,'playerHp':100};
+        this.deck = [1,1,1,2];
     }
 
-    async cards(credentials: any): Promise<boolean> {
-        const result = await this.backendService.getcards(credentials);
-        if (result.success) {
-            this.gameState.playerId = result.playerId;
-            return true;
-        }
-        return false;
+    async cards(): Promise<boolean> {
+        return await this.backendService.getcards();
     }
 
-    async getlevelbyid(credentials: any,id: number): Promise<boolean> {
-            const result = await this.backendService.getlevelbyid(credentials,id);
-            if (result.success) {
-                this.gameState.playerId = result.playerId;
-                return true;
-            }
-            return false;
-        }
-
+    async getlevelbyid(id: number): Promise<boolean> {
+        return await this.backendService.getlevelbyid(id);
+    }
 }
