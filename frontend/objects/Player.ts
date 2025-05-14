@@ -10,7 +10,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     private barHeight: number = 10;
     private textOffsetY: number = 5;
 
-    constructor(scene: Phaser.Scene, x: number, y: number, texture: string, size: number, Health: number, MaxHealth: number) {
+    constructor(scene: Phaser.Scene, x: number, y: number, texture: string, size: number, MaxHealth: number, Health: number) {
         super(scene, x + size / 2, y - size / 2, texture); // Phaser.GameObjects.Sprite
 
         this.maxHealth = MaxHealth;

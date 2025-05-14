@@ -1,10 +1,11 @@
 import Phaser from 'phaser';
-import BattleScene from '../scenes/BattleScene';
-
+import MainScene from '../scenes/MainScene';
+import LoginScene from '../scenes/LoginScene.ts';
 const config = {
     type: Phaser.AUTO,
     width: window.innerWidth,
     height: window.innerHeight,
+    parent: 'game-container', 
     physics: {
         default: 'arcade',
         arcade: {
@@ -13,7 +14,10 @@ const config = {
         }
     },
     backgroundColor: '#000000',
-    scene: [BattleScene]
+    scene: [LoginScene,MainScene],
+    dom: {
+        createContainer: true
+    },
 };
 
 new Phaser.Game(config);

@@ -1,10 +1,17 @@
 import Phaser from 'phaser';
 import Player from '../objects/Player';
+import GameManager from '../objects/GameManager';
 class BattleScene extends Phaser.Scene {
     public handAreaY = 150;
     player: Player | undefined;
-    constructor() {
+    gameManager:GameManager;
+    gameState:any;
+    level:any;
+    backendService: any;
+    constructor(gameManager:GameManager,gamestate:any) {
         super('BattleScene');
+        this.gameManager=gameManager;
+        this.gameState=gamestate;
     }
 
     preload() {
@@ -18,16 +25,25 @@ class BattleScene extends Phaser.Scene {
         }
     }
 
-    create() {
+    async create() {
+        this.level = await this.gameManager.getlevelbyid(this.gameState.levelid);
         const gameWidth=this.game.config.width as number;
         const gameHeight=this.game.config.height as number;
         window.addEventListener('resize', () => {
             this.game.scale.resize(window.innerWidth, window.innerHeight);
         });
         this.createBackground(gameWidth,gameHeight);
-        this.player=new Player(this, 50, gameHeight - 100, 'player',200,100,100);//未來直接用GameManager處理參數
+        this.player=new Player(this, 50, gameHeight - 100, 'player',200,this.gameState.playerMaxHp,this.gameState.playerHp);//未來直接用GameManager處理參數
         
-    } 
+        const big_text = this.add.text(gameWidth/2, gameHeight/2, this.level.name, { fontSize: '72px', color: '#fff' }).setOrigin(0.5).setDepth(100);
+        const small_text = this.add.text(gameWidth/2, gameHeight/2+72, '任務目標:'+this.level.description, { fontSize: '36px', color: '#fff' }).setOrigin(0.5).setDepth(100);
+        this.time.delayedCall(3000, () => {
+            big_text.destroy();
+            small_text.destroy();
+        });
+        
+        
+    }
 
     createBackground(gameWidth: number,gameHeight: number){
         const backgroundImage = this.add.image(gameWidth / 2, gameHeight / 2, 'background').setDisplaySize(gameWidth, gameHeight).setOrigin(0.5);
@@ -40,7 +56,7 @@ class BattleScene extends Phaser.Scene {
             gameObject.y = dragY;
         });
     }
-    
+
     update() {
     }
 }

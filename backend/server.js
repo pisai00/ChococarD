@@ -1,5 +1,6 @@
 const express = require('express');
 const mysql = require('mysql2/promise');
+const cors = require('cors'); // 引入 cors 模組
 require('dotenv').config();
 const app = express();
 const port = process.env.SERVER_PORT || 3000;
@@ -11,6 +12,14 @@ const pool = mysql.createPool({
   password: process.env.DB_PASSWORD,
   port: parseInt(process.env.DB_PORT || '3306', 10) // 使用 .env 的 DB_PORT，並確保它是數字
 });
+
+const corsOptions = {
+  origin: 'http://localhost:5173',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 app.get('/api/cards', async (req, res) => {
   try {

@@ -3,16 +3,17 @@
 export const backendErrorEmitter = new Phaser.Events.EventEmitter();
 
 class BackendService {
+    [x: string]: any;
     apiUrl = import.meta.env.VITE_API_BASE_URL;
 
     private async request(
         endpoint: string, // API 端點 (例如 '/cards', '/enemies')
-        method: 'GET' | 'POST' | 'PUT' | 'DELETE',
+        method: 'GET' | 'POST' | 'PUT' | 'DELETE'| 'HEAD',
         credentials: any = null, // 憑證作為 body 發送
         bodyData: any = null,    // 實際的請求體數據
         id: any = null          // 可選的 ID 作為 URL 路徑的一部分
     ): Promise<any> {
-        let url = `${this.apiUrl}${endpoint}`;
+        let url = `${this.apiUrl}/${endpoint}`;
         if (id) {
             url += `/${id}`; // 將 id 附加到 URL 路徑
         }
@@ -24,10 +25,11 @@ class BackendService {
         const config: RequestInit = {
             method,
             headers,
-            body: credentials ? JSON.stringify(credentials) : (bodyData ? JSON.stringify(bodyData) : null),
+            body: ['GET', 'HEAD'].includes(method) ? null :(credentials ? JSON.stringify(credentials) : (bodyData ? JSON.stringify(bodyData) : null)),
         };
 
         try {
+            console.log(url);
             const response = await fetch(url, config);
 
             if (!response.ok) {
@@ -48,16 +50,21 @@ class BackendService {
         }
     }
 
+    async login(account: string, password: string): Promise<any> {
+        const credentials = { account, password };
+        return this.request('auth/login', 'POST', credentials);
+    }
+
     async getcards(_credentials: any=null): Promise<any> {
-        return this.request(this.apiUrl,'GET',null,'cards');
+        return this.request('cards','GET',null,null);
     }
 
-    async getlevelbyid(level_id: number,_credentials: any=null,): Promise<any> {
-        return this.request(this.apiUrl,'GET',null,'levels',level_id);
+    async getlevelbyid(id: number,_credentials: any=null,): Promise<any> {
+        return this.request('levels','GET',null,null,id);
     }
 
-    async getenemiebyid(enemie_id: number,_credentials: any=null): Promise<any> {
-        return this.request(this.apiUrl,'GET',null,'enemies',enemie_id);
+    async getenemiebyid(id: number,_credentials: any=null): Promise<any> {
+        return this.request('enemies','GET',null,null,id);
     }
 }
 

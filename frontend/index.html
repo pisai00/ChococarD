@@ -7,8 +7,15 @@
   <style>
         body, html { margin: 0; padding: 0; overflow: hidden; height: 100%; }
         canvas { display: block; }
+        #game-container {
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            position: relative; /* 確保容器是定位上下文 */
+        }
     </style>
   <body >
+    <div id="game-container"></div>
     <script type="module" src="src/main.ts"></script>
   </body>
 </html>
