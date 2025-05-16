@@ -74,6 +74,7 @@ export default class LoginScene extends Phaser.Scene {
 
             if (response && response.success) {
                 console.log('登入成功:', response);
+                this.game.registry.set('authToken', response.token);
                 // 儲存使用者憑證 (Session ID 或 JWT - 根據你的後端實作)
                 // 切換到遊戲主場景
                 this.scene.start('MainScene'); // 替換成你的主要遊戲場景名稱

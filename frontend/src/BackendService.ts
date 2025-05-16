@@ -60,7 +60,7 @@ class BackendService {
     }
 
     async getlevelbyid(id: number,_credentials: any=null,): Promise<any> {
-        return this.request('levels','GET',null,null,id);
+        return this.request('game/levels','GET',null,null,id);
     }
 
     async getenemiebyid(id: number,_credentials: any=null): Promise<any> {
